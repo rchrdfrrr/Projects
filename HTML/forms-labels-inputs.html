@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working with Forms</title>
+</head>
+<body>
+    <header>
+        <h1>THIS IS A FORM</h1>
+    </header>
+    <form action="">
+        <label for="name">
+            Full Name:
+        </label>
+            <input required type="text" id="name" name="name" placeholder="Jane Doe"/>
+        <label>
+            Age:
+            <input 
+            required 
+            type="number" 
+            name="number" 
+            placeholder="0"/>
+        </label>
+        <label>
+            Email:
+            <input 
+            required 
+            type="email" 
+            name="email" 
+            placeholder="text@mail.com"
+            minlength="4"
+            maxlength="64"/>
+        </label>
+        <label>
+            Civil Status:
+            <input
+            disabled
+            type="text"
+            name="text"
+            placeholder="disabled"
+            />
+        </label>
+        <label>
+            Currently Applying:
+            <input 
+            readonly 
+            type="text" 
+            name="text" 
+            value="Yes"/>
+        </label>
+        <button type="submit">
+            <!-- <img src="https://www.wikihow.com/images/4/4b/Sweet-Talk-a-Girl-Step-20-Version-2.jpg" width="20"> -->
+            Submit
+        </button>
+        
+    </form>
+    
+</body>
+</html>

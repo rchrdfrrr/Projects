@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Survey Form</title>
+  </head>
+
+  <body>
+    <h1 id="title">Survey Form</h1>
+    <p id="description"> Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum 
+    </p>
+    <form id="survey-form">
+
+      <fieldset>
+        <legend>Personal Information</legend>
+      <label for id="name-label">Name:
+        <input required type="text" id="name" placeholder="John Doe">
+      </label>
+      <label for id="email-label">Email:
+        <input required type="email" id="email" placeholder="text@email.com">
+      </label>
+      <label for id="number-label">Number:
+        <input type="number" id="number" min="0" max="20" placeholder="09123456789">
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Experience</legend>
+      <label>Food:
+        <select id="experience" name="experience">
+          <option value="not okay">Not Okay</option>
+          <option value="okay">Okay</option>
+          <option selected value="very okay">Very Okay</option>
+        </select>
+      </label>
+      <label>Ambiance:
+        <select id="ambiance" name="ambiance">
+          <option value="not okay">Not Okay</option>
+          <option value="okay">Okay</option>
+          <option selected value="very okay">Very Okay</option>
+        </select>
+      </label>
+      <label>Staff:
+        <select id="staff" name="staff">
+          <option value="not okay">Not Okay</option>
+          <option value="okay">Okay</option>
+          <option selected value="very okay">Very Okay</option>
+        </select>
+      </label>
+    </fieldset>
+    <fieldset>
+      <legend>Where did you hear about us?</legend>
+      <label for="social-media">Social Media
+        <input type="checkbox" id="social-media" name="social-media" value="social-media">
+      </label>
+      <label for="ads">Ads
+        <input type="checkbox" id="ads" name="ads" value="ads">
+      </label>
+      <label for="family">Family
+        <input type="checkbox" id="family" name="family" value="family">
+      </label>
+    </fieldset>
+    <fieldset>
+      <legend>Will you go back?</legend>
+      <label for="yes-option">Yes
+        <input type="radio" id="yes-option" name="return" value="yes">
+      </label>
+      <label for="no-option">No
+        <input type="radio" id="no-option" name="return" value="no">
+      </label>
+    </fieldset>
+    <fieldset>
+      <label for="comments">Comments:<br>
+        <textarea cols="40" rows="5" name="comments" id="comments"></textarea>
+    </fieldset>
+      <button type="submit" id="submit">Submit</button>
+    </form>
+
+
+  </body>
+</html>
