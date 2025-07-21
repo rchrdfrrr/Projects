@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Slam Book</title>
+</head>
+<body>
+    <header>
+        <h1>The Slam Book</h1>
+        <p> lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum 
+            lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum 
+        </p>
+        <nav>
+            <ul>
+                <li> <a href="#personal-info">Personal Info</a> </li>
+                <li> <a href="#traits">Traits</a> </li>
+                <li> <a href="#statistics">Statistics</a> </li>
+                <li> <a href="hobbies">Hobbies</a> </li>
+                <li> <a href="preferences">Preferences</a> </li>
+            </ul>
+        </nav>
+    </header>
+            <fieldset id="personal-info">
+                <legend>Personal Info</legend>
+                    Photo: <img width="100" height="140" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKO8xS__Ngys9HrSxEwavYTq9t69OBKSwSsg&s" alt="photo of alden richards">
+                    <br>
+
+                    <label for="name">Name:</label>
+                    <input readonly type="text" id="name" name="name" value="Richard Christian C. Ferrer">
+                    
+                    <label for="age">Age:</label> 
+                    <input readonly type="number" id="age" name="age" value="25">
+
+                    <label for="birthday">Date of Birth:</label>
+                    <input readonly type="date" id="birthday" name="birthday" value="2000-05-25">
+                    
+                    <label for="contact-no">Contact Number:</label>
+                    <input readonly type="number" id="contact-no" name="contact-no" value="09603758559">
+                    
+                    <label for="email">Email:</label>
+                    <input readonly type="email" id="email" name="email" value="richardferrer1792@gmail.com" size="22">
+                    
+                    <label for="hometown">Hometown:</label>
+                    <input readonly type="text" id="hometown" name="hometown" value="Santa Rosa, Laguna"> 
+            </fieldset>
+
+            <fieldset id="traits">
+                <legend>Traits</legend>
+                    <div id="personality">
+                        <span>Personality:</span>
+
+                        <label for="ambivert">ambivert</label>
+                        <input disabled type="checkbox" checked id="ambivert" name="personal" value="hot">
+                        
+                        <label for="extrovert">extrovert</label>
+                        <input disabled type="checkbox" id="extrovert" name="personal" value="hot">
+
+                        <label for="intorvert">introvert</label>
+                        <input disabled type="checkbox" id="introvert" name="personal" value="cold">
+                    </div>
+
+                    <div id="emotionality">
+                        <span>Emotionality:</span>
+                        
+                        <label for="exaggerated">exaggerated</label>
+                        <input disabled type="checkbox" id="exaggerated" name="emotional" value="exaggerated">
+
+                        <label for="nonchalant">nonchalant</label>
+                        <input disabled type="checkbox" id="nonchalant" name="emotional" value="nonchalant">
+                        
+                        <label for="both">both</label>
+                        <input disabled type="checkbox" checked id="both" name="emotional" value="both">
+                    </div>
+
+            </fieldset>
+
+            <fieldset id="Statistics">
+                <legend>Statistics</legend>
+                <label for="height">Height:</label>
+                <input type="text" readonly id="height" name="height" value="5'7">
+
+                <label for="weight">Weight(kg):</label>
+                <input type="text" readonly id="weight" name="weight" value="75 kg">
+            </fieldset>
+            
+            <fieldset id="Hobbies">
+                <legend>Hobbies</legend>
+                <ul>
+                    <li>Basketball</li>
+                    <li>Video Games</li>
+                    <li>Table Tennis</li>
+                    <li>Watching streams</li>
+                </ul>
+            </fieldset>
+
+            <fieldset id="Preferences">
+                <legend>Preferences</legend>
+                <label>Drink:</label>
+                cold<input disabled type="checkbox" name="cold" value="cold">
+                lukewarm<input type="checkbox" checked disabled name="lukewarm" value="lukewarm">
+                hot<input type="checkbox" disabled name="hot" value="hot">
+            </fieldset>
+
+</body>
+</html>
