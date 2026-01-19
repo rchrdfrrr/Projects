@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coca-Cola eB2B Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes scale-in {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .animate-scale-in {
+            animation: scale-in 0.2s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="app"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <script type="text/babel">
+        const { useState } = React;
+
+        // Lucide Icons as SVG components
+        const ShoppingCart = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+        );
+
+        const Package = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+        );
+
+        const Clock = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        );
+
+        const Tag = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+            </svg>
+        );
+
+        const Heart = ({ className, fill }) => (
+            <svg className={className} fill={fill || "none"} stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+        );
+
+        const TrendingUp = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            </svg>
+        );
+
+        const X = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        );
+
+        const Sparkles = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+            </svg>
+        );
+
+        const Plus = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+        );
+
+        const Minus = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+            </svg>
+        );
+
+        const CheckCircle = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        );
+
+        const Truck = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+        );
+
+        const MapPin = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+        );
+
+        const CreditCard = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+            </svg>
+        );
+
+        const FileText = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+        );
+
+        const CocaColaEb2bMVP = () => {
+            const [activeTab, setActiveTab] = useState('catalog');
+            const [cart, setCart] = useState([]);
+            const [favorites, setFavorites] = useState([1, 3]);
+            const [promoModal, setPromoModal] = useState(null);
+            const [showCart, setShowCart] = useState(false);
+            const [showCheckout, setShowCheckout] = useState(false);
+            const [orders, setOrders] = useState([
+                { 
+                    id: 'ORD-2024-001', 
+                    date: 'Nov 3, 2024', 
+                    status: 'Delivered',
+                    items: [{ name: 'Coca-Cola Original 1.5L', cases: 2, price: 2160 }],
+                    total: 2160,
+                    deliveryDate: 'Nov 5, 2024'
+                },
+                { 
+                    id: 'ORD-2024-002', 
+                    date: 'Nov 4, 2024', 
+                    status: 'In Transit',
+                    items: [{ name: 'Sprite 1.5L', cases: 3, price: 3024 }],
+                    total: 3024,
+                    deliveryDate: 'Nov 7, 2024'
+                },
+                { 
+                    id: 'ORD-2024-003', 
+                    date: 'Nov 5, 2024', 
+                    status: 'Processing',
+                    items: [{ name: 'Royal 1.5L', cases: 1, price: 960 }],
+                    total: 960,
+                    deliveryDate: 'Nov 8, 2024'
+                }
+            ]);
+            const [deliveryAddress, setDeliveryAddress] = useState('123 Main St, Quezon City');
+            const [paymentMethod, setPaymentMethod] = useState('cod');
+
+            const promotions = [
+                { 
+                    id: 1, 
+                    title: '10% OFF on Coca-Cola Original', 
+                    desc: 'Valid until Nov 10', 
+                    color: 'bg-red-500',
+                    productIds: [1],
+                    type: '10% OFF',
+                    discount: 0.10
+                },
+                { 
+                    id: 2, 
+                    title: 'Buy 2 Get 1 Free on Sprite', 
+                    desc: 'On 1.5L products', 
+                    color: 'bg-blue-500',
+                    productIds: [3],
+                    type: 'Buy 2 Get 1 FREE',
+                    freeCase: true,
+                    minCases: 2
+                },
+                { 
+                    id: 3, 
+                    title: '15% OFF Coke 8oz Cases', 
+                    desc: 'Limited time offer', 
+                    color: 'bg-green-500',
+                    productIds: [5],
+                    type: '15% OFF',
+                    discount: 0.15
+                }
+            ];
+
+            const products = [
+                { id: 1, name: 'Coca-Cola Original', size: '1.5L', pricePerCase: 1080, piecesPerCase: 24, image: '🥤', stock: 500 },
+                { id: 2, name: 'Coca-Cola Zero', size: '1.5L', pricePerCase: 1080, piecesPerCase: 24, image: '🥤', stock: 350 },
+                { id: 3, name: 'Sprite', size: '1.5L', pricePerCase: 1008, piecesPerCase: 24, image: '🥤', stock: 420 },
+                { id: 4, name: 'Royal', size: '1.5L', pricePerCase: 960, piecesPerCase: 24, image: '🥤', stock: 380 },
+                { id: 5, name: 'Coca-Cola Original', size: '8oz', pricePerCase: 180, piecesPerCase: 24, image: '📦', stock: 200 },
+                { id: 6, name: 'Minute Maid Orange', size: '1L', pricePerCase: 1320, piecesPerCase: 24, image: '🧃', stock: 150 }
+            ];
+
+            const productsWithPromos = products.map(product => {
+                const promo = promotions.find(p => p.productIds.includes(product.id));
+                return promo ? { ...product, promo } : product;
+            });
+
+            const recentOrders = [
+                { id: 1, items: [{ name: 'Coca-Cola Original 1.5L', cases: 2 }, { name: 'Sprite 1.5L', cases: 1 }], total: 3168, date: 'Oct 28' },
+                { id: 2, items: [{ name: 'Coca-Cola Zero 1.5L', cases: 1 }, { name: 'Royal 1.5L', cases: 1 }], total: 2040, date: 'Oct 21' },
+                { id: 3, items: [{ name: 'Coca-Cola Original 8oz', cases: 3 }], total: 540, date: 'Oct 15' }
+            ];
+
+            const addToCart = (product, cases = 1) => {
+                if (product.promo) {
+                    setPromoModal({ product, cases, promo: product.promo });
+                } else {
+                    addToCartDirect(product, cases);
+                }
+            };
+
+            const addToCartDirect = (product, cases) => {
+                const existing = cart.find(item => item.id === product.id);
+                if (existing) {
+                    setCart(cart.map(item => 
+                        item.id === product.id ? { ...item, cases: item.cases + cases } : item
+                    ));
+                } else {
+                    setCart([...cart, { ...product, cases }]);
+                }
+            };
+
+            const confirmAddToCart = () => {
+                if (promoModal) {
+                    addToCartDirect(promoModal.product, promoModal.cases);
+                    setPromoModal(null);
+                }
+            };
+
+            const removeFromCart = (productId) => {
+                setCart(cart.filter(item => item.id !== productId));
+            };
+
+            const updateCartQuantity = (productId, newCases) => {
+                if (newCases <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    setCart(cart.map(item => 
+                        item.id === productId ? { ...item, cases: newCases } : item
+                    ));
+                }
+            };
+
+            const reorderPastFavorite = (order) => {
+                order.items.forEach(item => {
+                    const product = productsWithPromos.find(p => p.name === item.name);
+                    if (product) {
+                        const existing = cart.find(c => c.id === product.id);
+                        if (existing) {
+                            setCart(cart.map(c => 
+                                c.id === product.id ? { ...c, cases: c.cases + item.cases } : c
+                            ));
+                        } else {
+                            setCart([...cart, { ...product, cases: item.cases }]);
+                        }
+                    }
+                });
+            };
+
+            const totalCases = cart.reduce((sum, item) => sum + item.cases, 0);
+            
+            const calculateTotal = () => {
+                return cart.reduce((sum, item) => {
+                    let price = item.pricePerCase * item.cases;
+                    if (item.promo && item.promo.discount) {
+                        price = price * (1 - item.promo.discount);
+                    }
+                    return sum + price;
+                }, 0);
+            };
+
+            const calculateItemPrice = (item) => {
+                let price = item.pricePerCase * item.cases;
+                if (item.promo && item.promo.discount) {
+                    price = price * (1 - item.promo.discount);
+                }
+                return price;
+            };
+
+            const goToPromoProducts = (promoProductIds) => {
+                setActiveTab('catalog');
+            };
+
+            const proceedToCheckout = () => {
+                setShowCart(false);
+                setShowCheckout(true);
+            };
+
+            const placeOrder = () => {
+                const newOrder = {
+                    id: `ORD-2024-${String(orders.length + 1).padStart(3, '0')}`,
+                    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                    status: 'Processing',
+                    items: cart.map(item => ({
+                        name: `${item.name} ${item.size}`,
+                        cases: item.cases,
+                        price: calculateItemPrice(item)
+                    })),
+                    total: calculateTotal(),
+                    deliveryDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                };
+                
+                setOrders([newOrder, ...orders]);
+                setCart([]);
+                setShowCheckout(false);
+                setActiveTab('orders');
+            };
+
+            const getStatusColor = (status) => {
+                switch(status) {
+                    case 'Delivered': return 'bg-green-100 text-green-800';
+                    case 'In Transit': return 'bg-blue-100 text-blue-800';
+                    case 'Processing': return 'bg-yellow-100 text-yellow-800';
+                    default: return 'bg-gray-100 text-gray-800';
+                }
+            };
+
+            return (
+                <div className="min-h-screen bg-gray-50">
+                    {/* Header */}
+                    <div className="bg-red-600 text-white p-4 shadow-lg">
+                        <div className="max-w-6xl mx-auto flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                                <div className="bg-white p-2 rounded">
+                                    <span className="text-red-600 font-bold text-xl">Coca-Cola</span>
+                                </div>
+                                <div>
+                                    <div className="text-xs opacity-90">EUROPACIFIC ABOITIZ</div>
+                                    <div className="font-bold text-lg">eB2B Platform</div>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <div className="text-right">
+                                    <div className="text-xs opacity-90">Sari-Sari Store #123</div>
+                                    <div className="font-semibold">Juan Dela Cruz</div>
+                                </div>
+                                <div className="relative">
+                                    <button onClick={() => setShowCart(!showCart)} className="relative hover:opacity-80 transition">
+                                        <ShoppingCart className="w-6 h-6" />
+                                        {totalCases > 0 && (
+                                            <span className="absolute -top-2 -right-2 bg-yellow-400 text-red-600 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                                                {totalCases}
+                                            </span>
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Navigation Tabs */}
+                    <div className="bg-white shadow-sm border-b">
+                        <div className="max-w-6xl mx-auto flex">
+                            <button
+                                onClick={() => setActiveTab('catalog')}
+                                className={`flex-1 py-4 px-6 font-semibold flex items-center justify-center gap-2 transition ${
+                                    activeTab === 'catalog' ? 'text-red-600 border-b-4 border-red-600' : 'text-gray-500 hover:text-red-600'
+                                }`}
+                            >
+                                <Package className="w-5 h-5" />
+                                Product Catalog
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('reorder')}
+                                className={`flex-1 py-4 px-6 font-semibold flex items-center justify-center gap-2 transition ${
+                                    activeTab === 'reorder' ? 'text-red-600 border-b-4 border-red-600' : 'text-gray-500 hover:text-red-600'
+                                }`}
+                            >
+                                <Clock className="w-5 h-5" />
+                                Quick Reorder
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('promos')}
+                                className={`flex-1 py-4 px-6 font-semibold flex items-center justify-center gap-2 transition ${
+                                    activeTab === 'promos' ? 'text-red-600 border-b-4 border-red-600' : 'text-gray-500 hover:text-red-600'
+                                }`}
+                            >
+                                <Tag className="w-5 h-5" />
+                                Promotions
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('orders')}
+                                className={`flex-1 py-4 px-6 font-semibold flex items-center justify-center gap-2 transition ${
+                                    activeTab === 'orders' ? 'text-red-600 border-b-4 border-red-600' : 'text-gray-500 hover:text-red-600'
+                                }`}
+                            >
+                                <Truck className="w-5 h-5" />
+                                Order Status
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="max-w-6xl mx-auto p-6">
+                        {/* Product Catalog */}
+                        {activeTab === 'catalog' && (
+                            <div>
+                                <div className="flex justify-between items-center mb-6">
+                                    <h2 className="text-2xl font-bold text-gray-800">Product Catalog</h2>
+                                    <div className="text-sm text-gray-600">All products sold by case (24 pcs)</div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {productsWithPromos.map(product => (
+                                        <div key={product.id} className="bg-white rounded-lg shadow-md hover:shadow-xl transition overflow-hidden">
+                                            {product.promo && (
+                                                <div className="bg-red-600 text-white text-xs font-bold py-1 px-3 flex items-center gap-1">
+                                                    <Tag className="w-3 h-3" />
+                                                    {product.promo.type}
+                                                </div>
+                                            )}
+                                            <div className="p-6">
+                                                <div className="text-6xl text-center mb-4">{product.image}</div>
+                                                <h3 className="font-bold text-lg text-gray-800 mb-1">{product.name}</h3>
+                                                <p className="text-gray-600 text-sm mb-3">{product.size} • 24 pcs/case</p>
+                                                <div className="flex justify-between items-center mb-1">
+                                                    <div className="text-2xl font-bold text-red-600">₱{product.pricePerCase}</div>
+                                                    <div className="text-sm text-gray-500">per case</div>
+                                                </div>
+                                                <div className="text-xs text-gray-500 mb-4">
+                                                    ≈ ₱{(product.pricePerCase / product.piecesPerCase).toFixed(2)} per piece
+                                                </div>
+                                                <div className="text-sm text-gray-500 mb-4">Stock: {product.stock} cases</div>
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        onClick={() => addToCart(product)}
+                                                        className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-red-700 transition"
+                                                    >
+                                                        Add 1 Case
+                                                    </button>
+                                                    <button className={`p-2 rounded-lg border-2 transition ${
+                                                        favorites.includes(product.id) 
+                                                            ? 'border-red-600 text-red-600 bg-red-50' 
+                                                            : 'border-gray-300 text-gray-400 hover:border-red-600 hover:text-red-600'
+                                                    }`}>
+                                                        <Heart className="w-5 h-5" fill={favorites.includes(product.id) ? 'currentColor' : 'none'} />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Quick Reorder */}
+                        {activeTab === 'reorder' && (
+                            <div>
+                                <div className="mb-6">
+                                    <h2 className="text-2xl font-bold text-gray-800 mb-2">Quick Reorder</h2>
+                                    <p className="text-gray-600">Reorder your past favorites with just one click</p>
+                                </div>
+                                <div className="space-y-4">
+                                    {recentOrders.map(order => (
+                                        <div key={order.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
+                                            <div className="flex justify-between items-start mb-4">
+                                                <div>
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                        <Clock className="w-5 h-5 text-gray-400" />
+                                                        <span className="text-sm text-gray-600">Order from {order.date}</span>
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        {order.items.map((item, idx) => (
+                                                            <div key={idx} className="text-gray-800">
+                                                                • {item.name} <span className="text-gray-600">× {item.cases} case(s)</span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <div className="text-right">
+                                                    <div className="text-sm text-gray-600 mb-1">Total</div>
+                                                    <div className="text-2xl font-bold text-red-600">₱{order.total.toLocaleString()}</div>
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={() => reorderPastFavorite(order)}
+                                                className="w-full bg-red-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-red-700 transition flex items-center justify-center gap-2"
+                                            >
+                                                <TrendingUp className="w-5 h-5" />
+                                                Reorder This Order
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Promotions */}
+                        {activeTab === 'promos' && (
+                            <div>
+                                <div className="mb-6">
+                                    <h2 className="text-2xl font-bold text-gray-800 mb-2">Active Promotions</h2>
+                                    <p className="text-gray-600">Save more with our current offers</p>
+                                </div>
+                                <div className="space-y-4">
+                                    {promotions.map(promo => (
+                                        <div key={promo.id} className={`${promo.color} text-white rounded-lg shadow-lg p-6 hover:scale-105 transition-transform`}>
+                                            <div className="flex items-start justify-between">
+                                                <div className="flex-1">
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                        <Tag className="w-6 h-6" />
+                                                        <h3 className="text-xl font-bold">{promo.title}</h3>
+                                                    </div>
+                                                    <p className="text-white opacity-90 mb-4">{promo.desc}</p>
+                                                    <button 
+                                                        onClick={() => goToPromoProducts(promo.productIds)}
+                                                        className="bg-white text-gray-800 py-2 px-6 rounded-lg font-semibold hover:bg-gray-100 transition"
+                                                    >
+                                                        Shop Now
+                                                    </button>
+                                                </div>
+                                                <div className="text-6xl opacity-20">🎁</div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Order Status */}
+                    {activeTab === 'orders' && (
+                        <div>
+                            <div className="mb-6">
+                                <h2 className="text-2xl font-bold text-gray-800 mb-2">Order Status</h2>
+                                <p className="text-gray-600">Track your orders and delivery status</p>
+                            </div>
+                            <div className="space-y-4">
+                                {orders.map(order => (
+                                    <div key={order.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
+                                        <div className="flex justify-between items-start mb-4">
+                                            <div>
+                                                <div className="flex items-center gap-3 mb-2">
+                                                    <h3 className="font-bold text-lg text-gray-800">{order.id}</h3>
+                                                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.status)}`}>
+                                                        {order.status}
+                                                    </span>
+                                                </div>
+                                                <p className="text-sm text-gray-600">Ordered on {order.date}</p>
+                                            </div>
+                                            <div className="text-right">
+                                                <div className="text-sm text-gray-600 mb-1">Total</div>
+                                                <div className="text-2xl font-bold text-red-600">₱{order.total.toLocaleString()}</div>
+                                            </div>
+                                        </div>
+
+                                        <div className="border-t pt-4 mb-4">
+                                            <h4 className="font-semibold text-gray-700 mb-2">Items:</h4>
+                                            <div className="space-y-1">
+                                                {order.items.map((item, idx) => (
+                                                    <div key={idx} className="flex justify-between text-sm">
+                                                        <span className="text-gray-700">• {item.name} × {item.cases} case(s)</span>
+                                                        <span className="text-gray-600">₱{item.price.toLocaleString()}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                                            <Truck className="w-4 h-4" />
+                                            <span>Expected delivery: <span className="font-semibold text-gray-800">{order.deliveryDate}</span></span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Promo Modal */}
+                    {promoModal && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden animate-scale-in">
+                                <div className="bg-gradient-to-r from-red-600 to-red-700 p-6 text-white relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 text-9xl opacity-10">🎉</div>
+                                    <button 
+                                        onClick={() => setPromoModal(null)}
+                                        className="absolute top-4 right-4 text-white hover:bg-white hover:bg-opacity-20 rounded-full p-1"
+                                    >
+                                        <X className="w-5 h-5" />
+                                    </button>
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <Sparkles className="w-8 h-8" />
+                                        <h3 className="text-2xl font-bold">Special Promotion!</h3>
+                                    </div>
+                                    <p className="text-red-100">You're ordering a product with an active promo</p>
+                                </div>
+                                
+                                <div className="p-6">
+                                    <div className="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-4 mb-6">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <Tag className="w-5 h-5 text-yellow-700" />
+                                            <span className="font-bold text-yellow-900 text-lg">{promoModal.promo.type}</span>
+                                        </div>
+                                        {promoModal.promo.discount && (
+                                            <p className="text-yellow-800 text-sm">
+                                                Save {(promoModal.promo.discount * 100)}% on your order!
+                                            </p>
+                                        )}
+                                        {promoModal.promo.freeCase && (
+                                            <p className="text-yellow-800 text-sm">
+                                                Buy {promoModal.promo.minCases} cases, get 1 FREE!
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                                        <h4 className="font-bold text-gray-800 mb-3">Order Summary:</h4>
+                                        <div className="flex justify-between items-center mb-2">
+                                            <span className="text-gray-700">{promoModal.product.name}</span>
+                                            <span className="text-gray-700">{promoModal.product.size}</span>
+                                        </div>
+                                        <div className="flex justify-between items-center mb-2">
+                                            <span className="text-gray-600">Quantity:</span>
+                                            <span className="font-bold">{promoModal.cases} case(s) • {promoModal.cases * promoModal.product.piecesPerCase} pcs</span>
+                                        </div>
+                                        {promoModal.promo.discount && (
+                                            <>
+                                                <div className="flex justify-between items-center text-gray-500 line-through mb-1">
+                                                    <span>Regular Price:</span>
+                                                    <span>₱{(promoModal.product.pricePerCase * promoModal.cases).toLocaleString()}</span>
+                                                </div>
+                                                <div className="flex justify-between items-center text-red-600 font-bold text-lg">
+                                                    <span>Promo Price:</span>
+                                                    <span>₱{((promoModal.product.pricePerCase * promoModal.cases) * (1 - promoModal.promo.discount)).toLocaleString()}</span>
+                                                </div>
+                                                <div className="text-green-600 text-sm text-right font-semibold mt-1">
+                                                    You save ₱{((promoModal.product.pricePerCase * promoModal.cases) * promoModal.promo.discount).toLocaleString()}!
+                                                </div>
+                                            </>
+                                        )}
+                                        {!promoModal.promo.discount && (
+                                            <div className="flex justify-between items-center font-bold text-lg">
+                                                <span>Price:</span>
+                                                <span className="text-red-600">₱{(promoModal.product.pricePerCase * promoModal.cases).toLocaleString()}</span>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="flex gap-3">
+                                        <button
+                                            onClick={() => setPromoModal(null)}
+                                            className="flex-1 border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            onClick={confirmAddToCart}
+                                            className="flex-1 bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition"
+                                        >
+                                            Add to Cart
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Floating Cart Summary */}
+                    {cart.length > 0 && !showCart && (
+                        <div className="fixed bottom-6 right-6 bg-white rounded-lg shadow-2xl p-4 w-80">
+                            <div className="flex justify-between items-center mb-3">
+                                <h3 className="font-bold text-gray-800">Cart Summary</h3>
+                                <span className="text-red-600 font-bold">{totalCases} case(s)</span>
+                            </div>
+                            <div className="space-y-2 mb-4 max-h-40 overflow-y-auto">
+                                {cart.map(item => (
+                                    <div key={item.id} className="text-sm">
+                                        <div className="flex justify-between">
+                                            <span className="text-gray-700">{item.name} × {item.cases}</span>
+                                            <span className="font-semibold">₱{calculateItemPrice(item).toLocaleString()}</span>
+                                        </div>
+                                        {item.promo && (
+                                            <div className="text-xs text-green-600 flex items-center gap-1">
+                                                <Tag className="w-3 h-3" />
+                                                {item.promo.type} applied
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                            <button 
+                                onClick={() => setShowCart(true)}
+                                className="w-full bg-red-600 text-white py-3 rounded-lg font-bold hover:bg-red-700 transition"
+                            >
+                                View Cart - ₱{calculateTotal().toLocaleString()}
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Full Cart View */}
+                    {showCart && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                            <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+                                <div className="bg-red-600 p-6 text-white flex justify-between items-center">
+                                    <div>
+                                        <h3 className="text-2xl font-bold">Your Cart</h3>
+                                        <p className="text-red-100">{totalCases} case(s) • {cart.length} item(s)</p>
+                                    </div>
+                                    <button 
+                                        onClick={() => setShowCart(false)}
+                                        className="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition"
+                                    >
+                                        <X className="w-6 h-6" />
+                                    </button>
+                                </div>
+                                
+                                <div className="flex-1 overflow-y-auto p-6">
+                                    {cart.length === 0 ? (
+                                        <div className="text-center py-12">
+                                            <ShoppingCart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                                            <p className="text-gray-500 text-lg">Your cart is empty</p>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-4">
+                                            {cart.map(item => (
+                                                <div key={item.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                                                    <div className="flex gap-4">
+                                                        <div className="text-5xl">{item.image}</div>
+                                                        <div className="flex-1">
+                                                            <h4 className="font-bold text-gray-800">{item.name}</h4>
+                                                            <p className="text-sm text-gray-600">{item.size} • 24 pcs/case</p>
+                                                            {item.promo && (
+                                                                <div className="inline-flex items-center gap-1 bg-red-100 text-red-700 text-xs font-semibold px-2 py-1 rounded mt-1">
+                                                                    <Tag className="w-3 h-3" />
+                                                                    {item.promo.type}
+                                                                </div>
+                                                            )}
+                                                            
+                                                            <div className="mt-3 flex items-center gap-3">
+                                                                <span className="text-sm text-gray-600">Quantity:</span>
+                                                                <div className="flex items-center gap-2">
+                                                                    <button
+                                                                        onClick={() => updateCartQuantity(item.id, item.cases - 1)}
+                                                                        className="bg-gray-200 hover:bg-gray-300 text-gray-700 w-8 h-8 rounded flex items-center justify-center font-bold transition"
+                                                                    >
+                                                                        <Minus className="w-4 h-4" />
+                                                                    </button>
+                                                                    <span className="font-bold text-lg w-12 text-center">{item.cases}</span>
+                                                                    <button
+                                                                        onClick={() => updateCartQuantity(item.id, item.cases + 1)}
+                                                                        className="bg-gray-200 hover:bg-gray-300 text-gray-700 w-8 h-8 rounded flex items-center justify-center font-bold transition"
+                                                                    >
+                                                                        <Plus className="w-4 h-4" />
+                                                                    </button>
+                                                                    <span className="text-sm text-gray-500">case(s)</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div className="text-right flex flex-col justify-between">
+                                                            <button
+                                                                onClick={() => removeFromCart(item.id)}
+                                                                className="text-gray-400 hover:text-red-600 self-end transition"
+                                                            >
+                                                                <X className="w-5 h-5" />
+                                                            </button>
+                                                            <div>
+                                                                {item.promo && item.promo.discount && (
+                                                                    <div className="text-sm text-gray-400 line-through">
+                                                                        ₱{(item.pricePerCase * item.cases).toLocaleString()}
+                                                                    </div>
+                                                                )}
+                                                                <div className="text-xl font-bold text-red-600">
+                                                                    ₱{calculateItemPrice(item).toLocaleString()}
+                                                                </div>
+                                                                <div className="text-xs text-gray-500">
+                                                                    {item.cases * item.piecesPerCase} pcs
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {cart.length > 0 && (
+                                    <div className="border-t bg-gray-50 p-6">
+                                        <div className="space-y-2 mb-4">
+                                            <div className="flex justify-between text-gray-600">
+                                                <span>Subtotal:</span>
+                                                <span className="font-semibold">₱{calculateTotal().toLocaleString()}</span>
+                                            </div>
+                                            <div className="flex justify-between text-gray-600">
+                                                <span>Delivery Fee:</span>
+                                                <span className="font-semibold text-green-600">FREE</span>
+                                            </div>
+                                            <div className="border-t pt-2 flex justify-between text-lg font-bold">
+                                                <span>Total:</span>
+                                                <span className="text-red-600">₱{calculateTotal().toLocaleString()}</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <button 
+                                            onClick={proceedToCheckout}
+                                            className="w-full bg-red-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-red-700 transition"
+                                        >
+                                            Proceed to Checkout
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Checkout Page */}
+                    {showCheckout && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+                            <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full my-8">
+                                <div className="bg-red-600 p-6 text-white flex justify-between items-center rounded-t-2xl">
+                                    <div>
+                                        <h3 className="text-2xl font-bold">Checkout</h3>
+                                        <p className="text-red-100">Review and confirm your order</p>
+                                    </div>
+                                    <button 
+                                        onClick={() => setShowCheckout(false)}
+                                        className="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition"
+                                    >
+                                        <X className="w-6 h-6" />
+                                    </button>
+                                </div>
+                                
+                                <div className="p-6">
+                                    <div className="grid md:grid-cols-2 gap-6 mb-6">
+                                        {/* Delivery Information */}
+                                        <div className="bg-gray-50 rounded-lg p-4">
+                                            <div className="flex items-center gap-2 mb-4">
+                                                <MapPin className="w-5 h-5 text-red-600" />
+                                                <h4 className="font-bold text-gray-800">Delivery Address</h4>
+                                            </div>
+                                            <textarea
+                                                value={deliveryAddress}
+                                                onChange={(e) => setDeliveryAddress(e.target.value)}
+                                                className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-600"
+                                                rows="3"
+                                            />
+                                            <div className="mt-3 text-sm text-gray-600">
+                                                <div className="flex items-start gap-2">
+                                                    <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+                                                    <span>Delivery within 2-3 business days</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Payment Method */}
+                                        <div className="bg-gray-50 rounded-lg p-4">
+                                            <div className="flex items-center gap-2 mb-4">
+                                                <CreditCard className="w-5 h-5 text-red-600" />
+                                                <h4 className="font-bold text-gray-800">Payment Method</h4>
+                                            </div>
+                                            <div className="space-y-3">
+                                                <label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer hover:bg-white transition">
+                                                    <input
+                                                        type="radio"
+                                                        name="payment"
+                                                        value="cod"
+                                                        checked={paymentMethod === 'cod'}
+                                                        onChange={(e) => setPaymentMethod(e.target.value)}
+                                                        className="w-4 h-4 text-red-600"
+                                                    />
+                                                    <div>
+                                                        <div className="font-semibold text-gray-800">Cash on Delivery</div>
+                                                        <div className="text-xs text-gray-600">Pay when you receive</div>
+                                                    </div>
+                                                </label>
+                                                <label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer hover:bg-white transition">
+                                                    <input
+                                                        type="radio"
+                                                        name="payment"
+                                                        value="bank"
+                                                        checked={paymentMethod === 'bank'}
+                                                        onChange={(e) => setPaymentMethod(e.target.value)}
+                                                        className="w-4 h-4 text-red-600"
+                                                    />
+                                                    <div>
+                                                        <div className="font-semibold text-gray-800">Bank Transfer</div>
+                                                        <div className="text-xs text-gray-600">Pay via online banking</div>
+                                                    </div>
+                                                </label>
+                                                <label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer hover:bg-white transition">
+                                                    <input
+                                                        type="radio"
+                                                        name="payment"
+                                                        value="credit"
+                                                        checked={paymentMethod === 'credit'}
+                                                        onChange={(e) => setPaymentMethod(e.target.value)}
+                                                        className="w-4 h-4 text-red-600"
+                                                    />
+                                                    <div>
+                                                        <div className="font-semibold text-gray-800">Terms/Credit</div>
+                                                        <div className="text-xs text-gray-600">Pay on credit terms</div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Order Summary */}
+                                    <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                                        <div className="flex items-center gap-2 mb-4">
+                                            <FileText className="w-5 h-5 text-red-600" />
+                                            <h4 className="font-bold text-gray-800">Order Summary</h4>
+                                        </div>
+                                        <div className="space-y-3 mb-4 max-h-60 overflow-y-auto">
+                                            {cart.map(item => (
+                                                <div key={item.id} className="flex justify-between items-start py-2 border-b">
+                                                    <div className="flex gap-3">
+                                                        <div className="text-3xl">{item.image}</div>
+                                                        <div>
+                                                            <div className="font-semibold text-gray-800">{item.name}</div>
+                                                            <div className="text-sm text-gray-600">{item.size} • {item.cases} case(s) • {item.cases * item.piecesPerCase} pcs</div>
+                                                            {item.promo && (
+                                                                <div className="inline-flex items-center gap-1 bg-red-100 text-red-700 text-xs font-semibold px-2 py-1 rounded mt-1">
+                                                                    <Tag className="w-3 h-3" />
+                                                                    {item.promo.type}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        {item.promo && item.promo.discount && (
+                                                            <div className="text-sm text-gray-400 line-through">
+                                                                ₱{(item.pricePerCase * item.cases).toLocaleString()}
+                                                            </div>
+                                                        )}
+                                                        <div className="font-bold text-red-600">
+                                                            ₱{calculateItemPrice(item).toLocaleString()}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        <div className="border-t pt-4 space-y-2">
+                                            <div className="flex justify-between text-gray-700">
+                                                <span>Subtotal:</span>
+                                                <span className="font-semibold">₱{calculateTotal().toLocaleString()}</span>
+                                            </div>
+                                            <div className="flex justify-between text-gray-700">
+                                                <span>Delivery Fee:</span>
+                                                <span className="font-semibold text-green-600">FREE</span>
+                                            </div>
+                                            <div className="flex justify-between text-xl font-bold pt-2 border-t">
+                                                <span>Total:</span>
+                                                <span className="text-red-600">₱{calculateTotal().toLocaleString()}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Action Buttons */}
+                                    <div className="flex gap-3">
+                                        <button
+                                            onClick={() => setShowCheckout(false)}
+                                            className="flex-1 border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition"
+                                        >
+                                            Back to Cart
+                                        </button>
+                                        <button
+                                            onClick={placeOrder}
+                                            className="flex-1 bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition flex items-center justify-center gap-2"
+                                        >
+                                            <CheckCircle className="w-5 h-5" />
+                                            Place Order
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('app'));
+        root.render(<CocaColaEb2bMVP />);
+    </script>
+</body>
+</html>
