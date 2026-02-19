@@ -15,39 +15,22 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# load environment variables from a .env file when present (use django-environ)
-import os
-try:
-    import environ
-except Exception:
-    environ = None
 
-if environ:
-    env = environ.Env(DEBUG=(bool, False))
-    # read .env from project root if present
-    env.read_env(os.path.join(BASE_DIR, '.env'))
-else:
-    env = None
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-# SECURITY
-# load sensitive settings from environment when available
-if env:
-    SECRET_KEY = env('DJANGO_SECRET_KEY')
-    DEBUG = env.bool('DJANGO_DEBUG', default=False)
-    ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=[
-        'project-blond-nu-95.vercel.app',
-        'localhost',
-        '127.0.0.1'])
-else:
-    # fallback to insecure defaults for local development only
-    SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-7ngz0m5-7*&ox#1ozx56-fxum%b225ljl-h#c6!hg%1r(#+$-^')
-    DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
-    ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '*').split(',')
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure-7ngz0m5-7*&ox#1ozx56-fxum%b225ljl-h#c6!hg%1r(#+$-^'
 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
+
+ALLOWED_HOSTS =[
+    '.vercel.app',
+    'localhost',
+    '127.0.0.1']
 
 # Application definition
 
@@ -95,16 +78,12 @@ WSGI_APPLICATION = 'test_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-if env:
-    # expects DATABASE_URL like: sqlite:///db.sqlite3 or postgres://user:pass@host:port/dbname
-    DATABASES = {'default': env.db(default=f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}")}
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
 
 
 # Password validation
