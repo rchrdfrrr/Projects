@@ -15,17 +15,35 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# load environment variables from a .env file when present (use django-environ)
+import os
+try:
+    import environ
+except Exception:
+    environ = None
+
+if environ:
+    env = environ.Env(DEBUG=(bool, False))
+    # read .env from project root if present
+    env.read_env(os.path.join(BASE_DIR, '.env'))
+else:
+    env = None
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7ngz0m5-7*&ox#1ozx56-fxum%b225ljl-h#c6!hg%1r(#+$-^'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
+# SECURITY
+# load sensitive settings from environment when available
+if env:
+    SECRET_KEY = env('DJANGO_SECRET_KEY')
+    DEBUG = env.bool('DJANGO_DEBUG', default=False)
+    ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['*'])
+else:
+    # fallback to insecure defaults for local development only
+    SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-7ngz0m5-7*&ox#1ozx56-fxum%b225ljl-h#c6!hg%1r(#+$-^')
+    DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
+    ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '*').split(',')
 
 
 # Application definition
@@ -48,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'test_project.urls'
@@ -73,12 +92,16 @@ WSGI_APPLICATION = 'test_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if env:
+    # expects DATABASE_URL like: sqlite:///db.sqlite3 or postgres://user:pass@host:port/dbname
+    DATABASES = {'default': env.db(default=f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}")}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
 
 
 # Password validation
@@ -112,7 +135,16 @@ USE_I18N = True
 USE_TZ = True
 
 
+#you can call the STATIC_ROOT property files whatever you want, but it is common to call it staticfiles or productionfiles
+STATIC_ROOT = BASE_DIR / 'productionfiles'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
-
 STATIC_URL = 'static/'
+
+# this is where you put your global static files (like CSS, JavaScript, and images) that are not tied to a specific app.
+# you can list all the directories where Django should look for static files.
+STATICFILES_DIRS = [
+    BASE_DIR / 'mystaticfiles'
+]
+

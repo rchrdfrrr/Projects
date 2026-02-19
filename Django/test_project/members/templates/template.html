@@ -1,0 +1,27 @@
+{% extends 'master.html' %}
+
+{% block title %}
+  Testing Template
+{% endblock %}
+
+{% block content %}
+  <h1>Testing - Template</h1>
+
+    {% if mymembers.2.firstname == 'Camille' %}
+        <h2> What's up, : {{ mymembers.2.firstname }}, Joined on: {{mymembers.2.joined_date}}! :D </h2>
+    {% endif %}
+
+<p> Here are the complete list of members:</p>
+
+<ol>
+    {% for x in mymembers %}
+        <li>{{ x.firstname }} - {{ x.phone }}</li>
+    {% endfor %}
+</ol>
+
+<h2> {{ firstname }} </h2>
+
+
+<!-- {% lorem 2 p %} -->
+
+{% endblock %}

@@ -11,5 +11,38 @@
     {% endfor %}
 
     <p> In views.py you can see what the fruits look like. </p>
+
+{% include 'template.html' with firstname='Camille' %}
+
+<table border='1'>
+  <tr>
+    <th>ID</th>
+    <th>Firstname</th>
+    <th>Lastname</th>
+  </tr>
+  {% for x in allmember %}
+    <tr>
+      <td>{{ x.id }}</td>
+        <td>{{ x.firstname }}</td>
+      <td>{{ x.lastname }}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+<br>
+
+<table border='1'>
+  <tr>
+    <th>Firstname</th>
+    <th>Lastname</th>
+  </tr>
+  {% for x in somemember %}
+    <tr>
+      <td>{{ x.0 }}</td>
+        <td>{{ x.1 }}</td>
+    </tr>
+  {% endfor %}
+</table>
+
 </body>
 </html>
