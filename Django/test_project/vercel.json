@@ -2,8 +2,7 @@
   "builds": [
     {
       "src": "test_project/wsgi.py",
-      "use": "@vercel/python",
-      "config": { "runtime": "python3.11" }
+      "use": "@vercel/python"
     }
   ],
   "routes": [
