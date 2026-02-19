@@ -1,0 +1,5 @@
+# Ignore local environment files and database
+*.env
+db.sqlite3
+__pycache__/
+*.pyc

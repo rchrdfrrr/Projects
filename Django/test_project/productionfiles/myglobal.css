@@ -1,0 +1,11 @@
+/* this "global static files" refer to project-wide static assets (like CSS, JavaScript, and images) 
+that are not tied to a specific app. Their primary use is to hold shared design elements, 
+third-party libraries, or universal branding assets, ensuring consistency and efficient management 
+across the entire project. */
+
+body {
+  color: rgba(0, 0, 0, 0.788);
+  font-family: verdana;
+  background-color: rgb(211, 231, 238);
+
+}
