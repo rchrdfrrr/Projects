@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 from decouple import config
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'members'
+    'members',
+    'whitenoise.runserver_nostatic'
 ]
 
 MIDDLEWARE = [
@@ -126,7 +128,8 @@ USE_TZ = True
 
 
 #you can call the STATIC_ROOT property files whatever you want, but it is common to call it staticfiles or productionfiles
-STATIC_ROOT = BASE_DIR / 'productionfiles'
+# STATIC_ROOT = BASE_DIR / 'productionfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'productionfiles')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
@@ -134,7 +137,7 @@ STATIC_URL = 'static/'
 
 # this is where you put your global static files (like CSS, JavaScript, and images) that are not tied to a specific app.
 # you can list all the directories where Django should look for static files.
-STATICFILES_DIRS = [
-    BASE_DIR / 'mystaticfiles'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'mystaticfiles')
+    # BASE_DIR / 'mystaticfiles'
 ]
 
