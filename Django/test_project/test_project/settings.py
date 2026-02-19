@@ -31,10 +31,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # # Take environment variables from .env file
 # environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7ngz0m5-7*&ox#1ozx56-fxum%b225ljl-h#c6!hg%1r(#+$-^'
+SECRET_KEY ='django-insecure-7ngz0m5-7*&ox#1ozx56-fxum%b225ljl-h#c6!hg%1r(#+$-^'
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = False
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['.vercel.app','localhost','127.0.0.1']
 
