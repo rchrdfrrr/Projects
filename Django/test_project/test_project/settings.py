@@ -38,7 +38,10 @@ else:
 if env:
     SECRET_KEY = env('DJANGO_SECRET_KEY')
     DEBUG = env.bool('DJANGO_DEBUG', default=False)
-    ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['*'])
+    ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=[
+        'project-blond-nu-95.vercel.app',
+        'localhost',
+        '127.0.0.1'])
 else:
     # fallback to insecure defaults for local development only
     SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-7ngz0m5-7*&ox#1ozx56-fxum%b225ljl-h#c6!hg%1r(#+$-^')
