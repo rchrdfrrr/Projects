@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 from decouple import config
 import os
-import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,16 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-# env = environ.Env(
-#     # set casting, default value
-#     DEBUG=(bool, False)
-# )
-# # Take environment variables from .env file
-# environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY ='django-insecure-7ngz0m5-7*&ox#1ozx56-fxum%b225ljl-h#c6!hg%1r(#+$-^'
+SECRET_KEY = 'django-insecure-7ngz0m5-7*&ox#1ozx56-fxum%b225ljl-h#c6!hg%1r(#+$-^'
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = False
 DEBUG = False
 
 ALLOWED_HOSTS = ['.vercel.app','localhost','127.0.0.1']
